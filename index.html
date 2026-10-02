@@ -1,0 +1,1084 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:title" content="Michal Sprung · AI Engineer">
+<meta property="og:description" content="GenAI agents, ML and computer vision, backend and full-stack projects with live demos.">
+<meta property="og:image" content="https://michal329.github.io/media/agent-poster.jpg">
+<title>Michal Sprung</title>
+<meta name="description" content="Michal Sprung — software engineer building backend systems, real-time engines and AI agents.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#f4f5f8; --surface:#ffffff; --sunk:#eceef4; --ink:#151832; --mute:#5b6080; --rule:#dadde8;
+  --acc:#3b47d6; --acc-ink:#ffffff; --acc-soft:#e3e6ff; --amber:#c27c0e; --amber-soft:#fbefd6; --ok:#1f8a5b;
+  --code-bg:#0f1229; --code-ink:#d6d9f2; --code-mute:#7c82aa; --code-k:#9aa3ff; --code-s:#9fe0b9; --code-n:#f5b342; --code-f:#ffb3c7;
+  --shadow:0 1px 0 rgba(21,24,50,.04),0 18px 40px -24px rgba(21,24,50,.28);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1229; --surface:#171b38; --sunk:#131733; --ink:#eceef8; --mute:#9aa0c4; --rule:#2b315c;
+  --acc:#8c96ff; --acc-ink:#0f1229; --acc-soft:#242a5c; --amber:#f5b342; --amber-soft:#3a2f17; --ok:#4cc38a;
+  --code-bg:#0b0e22; --shadow:0 18px 40px -24px rgba(0,0,0,.7); color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0f1229; --surface:#171b38; --sunk:#131733; --ink:#eceef8; --mute:#9aa0c4; --rule:#2b315c;
+  --acc:#8c96ff; --acc-ink:#0f1229; --acc-soft:#242a5c; --amber:#f5b342; --amber-soft:#3a2f17; --ok:#4cc38a;
+  --code-bg:#0b0e22; --shadow:0 18px 40px -24px rgba(0,0,0,.7); color-scheme:dark;}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+a{color:var(--acc);text-underline-offset:3px}
+img,video{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:clamp(16px,4vw,40px)}
+.label{font:600 12px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.02em}
+h2{font-size:clamp(30px,4.2vw,46px);line-height:1.04;font-weight:800}
+h3{font-size:22px;line-height:1.15;font-weight:700}
+p{margin:0}
+.mono{font-family:var(--mono)}
+
+/* nav */
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+nav .wrap{display:flex;align-items:center;gap:18px;height:58px}
+.mark{font:800 18px var(--display);letter-spacing:-.03em;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px}
+.mark i{width:28px;height:28px;border-radius:7px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font:600 12px var(--mono);font-style:normal}
+.navlinks{display:flex;gap:4px;margin-left:auto}
+.navlinks a{color:var(--mute);text-decoration:none;font-size:14px;font-weight:500;padding:6px 10px;border-radius:8px}
+.navlinks a:hover{color:var(--ink);background:var(--sunk)}
+.iconbtn{border:1px solid var(--rule);background:var(--surface);color:var(--ink);width:36px;height:36px;border-radius:9px;cursor:pointer;display:grid;place-items:center}
+@media (max-width:720px){.navlinks{display:none}.iconbtn{margin-left:auto}}
+
+/* hero */
+.hero{padding-block:clamp(36px,6vw,72px) 40px}
+.hero-grid{display:grid;grid-template-columns:1fr 1.08fr;gap:clamp(28px,4vw,56px);align-items:start}
+@media (max-width:960px){.hero-grid{grid-template-columns:1fr}}
+.nowpill{display:inline-flex;align-items:center;gap:10px;font:500 13px var(--body);color:var(--mute);border:1px solid var(--rule);background:var(--surface);border-radius:99px;padding:6px 12px 6px 8px}
+.nowpill b{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 22%,transparent)}
+.hero h1{font-size:clamp(46px,7vw,84px);line-height:.95;font-weight:800;letter-spacing:-.035em;margin-top:22px}
+.hero h1 span{color:var(--acc);display:block;font-size:.56em;line-height:1.05;margin-top:.18em;letter-spacing:-.025em}
+.lede{font-size:clamp(17px,1.6vw,19px);color:var(--mute);max-width:34em;margin-top:22px}
+.lede strong{color:var(--ink);font-weight:600}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:10px;font:600 15px var(--body);text-decoration:none;border:1px solid var(--rule);color:var(--ink);background:var(--surface);cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn:hover{transform:translateY(-1px)}
+.proof{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:40px;border-top:1px solid var(--rule)}
+.proof div{padding:16px 14px 0 0}
+.proof b{display:block;font:800 30px/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.proof span{display:block;font-size:13px;color:var(--mute);margin-top:6px;line-height:1.35}
+@media (max-width:560px){.proof{grid-template-columns:repeat(2,1fr);row-gap:14px}}
+
+.reel{background:var(--code-bg);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--rule)}
+.reel-tabs{display:flex;gap:2px;padding:8px;background:#0b0e22;overflow-x:auto}
+.reel-tabs button{flex:1;white-space:nowrap;border:0;background:transparent;color:#9aa0c4;font:600 12.5px var(--mono);padding:9px 10px;border-radius:8px;cursor:pointer}
+.reel-tabs button[aria-selected="true"]{background:#1d2245;color:#eceef8}
+.reel video{width:100%;aspect-ratio:16/9;object-fit:contain;background:#0f1229}
+.reel-cap{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;color:#9aa0c4;font-size:13px;background:#0b0e22}
+.reel-cap a{color:#c9cdf0}
+
+/* sections */
+section{padding-block:clamp(56px,8vw,96px)}
+.sec-head{display:grid;grid-template-columns:200px 1fr;gap:24px;margin-bottom:40px;align-items:baseline}
+.sec-head p{color:var(--mute);max-width:44em;margin-top:12px}
+@media (max-width:760px){.sec-head{grid-template-columns:1fr;gap:8px}}
+
+/* case study */
+.case{display:grid;grid-template-columns:1.15fr 1fr;gap:clamp(24px,4vw,48px);padding-block:44px;border-top:1px solid var(--rule)}
+.case.flip{grid-template-columns:1fr 1.15fr}
+.case>*,.hero-grid>*,.kf>*{min-width:0}
+.case.flip .media{order:2}
+@media (max-width:960px){.case,.case.flip{grid-template-columns:1fr}.case.flip .media{order:0}}
+.case h3{font-size:clamp(26px,3vw,34px);font-weight:800;letter-spacing:-.025em}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 0 16px;font:500 13px var(--body);color:var(--mute)}
+.meta .badge{font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:6px;background:var(--acc-soft);color:var(--acc)}
+.meta .badge.amber{background:var(--amber-soft);color:var(--amber)}
+.case .summary{font-size:17px;max-width:36em}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--rule);margin-top:24px;overflow-x:auto}
+.tabs button{border:0;background:none;font:600 14px var(--body);color:var(--mute);padding:10px 12px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--acc)}
+.panel{padding-top:18px}
+.panel ul{margin:0;padding-left:0;list-style:none;display:grid;gap:10px}
+.panel li{position:relative;padding-left:22px}
+.panel li::before{content:"";position:absolute;left:2px;top:.62em;width:8px;height:8px;border-radius:2px;background:var(--acc)}
+.panel li b{font-weight:600}
+.stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+.stack span{font:500 12px var(--mono);padding:4px 8px;border:1px solid var(--rule);border-radius:6px;color:var(--mute);background:var(--surface)}
+.links{display:flex;flex-wrap:wrap;gap:16px;margin-top:18px;font-weight:600;font-size:14px}
+
+.frame{background:var(--surface);border:1px solid var(--rule);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.frame video{width:100%;background:#0f1229}
+.frame figcaption,.cap{font-size:13px;color:var(--mute);padding:10px 14px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.vctl{display:flex;gap:6px}
+.vctl button{font:600 11px var(--mono);border:1px solid var(--rule);background:var(--bg);color:var(--mute);border-radius:6px;padding:3px 7px;cursor:pointer}
+.vctl button[aria-pressed="true"]{color:var(--acc);border-color:var(--acc)}
+figure{margin:0}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--rule);border-radius:12px;background:var(--surface);margin-top:14px}
+.stats div{padding:12px 14px;border-left:1px solid var(--rule)}
+.stats div:first-child{border-left:0}
+.stats b{font:800 22px/1.1 var(--display);display:block;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stats span{font-size:12px;color:var(--mute);line-height:1.3;display:block;margin-top:3px}
+@media (max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}.stats div:nth-child(3){border-left:0}.stats div:nth-child(n+3){border-top:1px solid var(--rule)}}
+
+.gallery{margin-top:14px}
+.g-main{background:#fff;border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+.g-main img{width:100%;aspect-ratio:949/620;object-fit:contain;background:#fff}
+.g-cap{font-size:14px;margin-top:10px;min-height:3.2em}
+.g-cap b{font-weight:600}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.thumbs button{padding:0;border:2px solid transparent;border-radius:8px;overflow:hidden;cursor:pointer;background:#fff}
+.thumbs button[aria-pressed="true"]{border-color:var(--acc)}
+.thumbs img{aspect-ratio:3/2;object-fit:cover;width:100%}
+
+/* code */
+.code{background:var(--code-bg);color:var(--code-ink);border-radius:12px;overflow:hidden;border:1px solid #232850}
+.code-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:9px 14px;border-bottom:1px solid #232850;font:500 12px var(--mono);color:var(--code-mute)}
+.code-head button{font:600 11px var(--mono);background:#1d2245;color:#c9cdf0;border:0;border-radius:6px;padding:4px 8px;cursor:pointer}
+.code pre{margin:0;padding:14px 16px;overflow:auto;max-height:380px;font:400 13px/1.6 var(--mono);tab-size:4}
+.code .why{padding:10px 16px 14px;font:400 13.5px/1.5 var(--body);color:#aeb3d6;border-top:1px solid #232850}
+.hljs-keyword,.hljs-built_in,.hljs-literal{color:var(--code-k)}
+.hljs-string{color:var(--code-s)} .hljs-number{color:var(--code-n)} .hljs-comment{color:var(--code-mute);font-style:italic}
+.hljs-title,.hljs-title.function_{color:var(--code-f)} .hljs-params{color:var(--code-ink)} .hljs-meta,.hljs-decorator{color:var(--code-n)}
+
+/* chess */
+.kf{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;margin-top:22px}
+.kf>#board{flex:1 1 280px;max-width:420px}.kf>.kf-side{flex:1 1 190px}
+@media (max-width:760px){.kf{grid-template-columns:1fr}}
+#board{position:relative;width:100%;aspect-ratio:1;border-radius:10px;overflow:hidden;touch-action:manipulation;user-select:none;box-shadow:var(--shadow);border:1px solid var(--rule)}
+#board .sq{position:absolute;width:12.5%;height:12.5%}
+#board .pc{position:absolute;width:12.5%;height:12.5%;pointer-events:none;will-change:transform}
+#board .pc img{width:100%;height:100%}
+#board .cd{position:absolute;left:0;right:0;top:0;background:rgba(15,18,41,.42)}
+#board .dot{position:absolute;width:12.5%;height:12.5%;display:grid;place-items:center;pointer-events:none}
+#board .dot::after{content:"";width:26%;height:26%;border-radius:50%;background:var(--acc);opacity:.75}
+#board .sel{position:absolute;width:12.5%;height:12.5%;box-shadow:inset 0 0 0 3px var(--acc);pointer-events:none}
+#board .over{position:absolute;inset:0;display:grid;place-items:center;background:rgba(15,18,41,.62);color:#fff;text-align:center;font:800 30px var(--display)}
+#board .over small{display:block;font:500 14px var(--body);margin-top:6px}
+.kf-side{display:grid;gap:12px;font-size:14px}
+.kf-side .rule{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;color:var(--mute)}
+.kf-side .rule b{color:var(--ink);font-weight:600}
+.kf-side .rule i{font:600 12px var(--mono);font-style:normal;width:28px;height:28px;border-radius:7px;background:var(--acc-soft);color:var(--acc);display:grid;place-items:center}
+#kfstatus{font:600 13px var(--mono);color:var(--ink)}
+
+/* engine footage captions */
+.capbar{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:center;pointer-events:none}
+.capbar span{opacity:0;background:rgba(15,18,41,.86);color:#fff;font:500 14px var(--body);padding:8px 12px;border-radius:8px;max-width:100%;text-align:center;transition:opacity .25s}
+.vwrap{position:relative}
+
+/* gesture canvas */
+#hand{width:100%;aspect-ratio:4/3;background:#0f1229;display:block}
+
+/* more projects */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+@media (max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px;transition:opacity .25s,transform .25s,border-color .25s}
+.card .kind{font:600 11px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--mute)}
+.card p{font-size:14.5px;color:var(--mute)}
+.card .stack{padding-top:6px}
+.card a.more{font-weight:600;font-size:14px}
+.card.dim{opacity:.32}
+.card.hit{border-color:var(--acc);transform:translateY(-2px)}
+.card img{border-radius:8px;border:1px solid var(--rule);aspect-ratio:16/10;object-fit:cover;width:100%}
+.card details{font-size:14px}
+.card summary{cursor:pointer;font-weight:600;color:var(--acc)}
+.card details .code{margin-top:10px}
+.card details pre{max-height:260px;font-size:12px}
+
+/* toolbox */
+.tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px 40px}
+@media (max-width:760px){.tool-grid{grid-template-columns:1fr}}
+.tool-grid h3{font-size:17px;margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{font:500 13.5px var(--body);border:1px solid var(--rule);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 10px;cursor:pointer}
+.chips button[data-p]{border-style:solid}
+.chips button:not([data-p]){color:var(--mute);cursor:default}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chips button sup{font:600 10px var(--mono);color:var(--acc);margin-left:3px}
+.chips button[aria-pressed="true"] sup{color:var(--bg)}
+#toolnote{margin-top:22px;font-size:14px;color:var(--mute);min-height:1.6em}
+#toolnote b{color:var(--ink)}
+
+/* path */
+.path{display:grid;gap:0;border-left:2px solid var(--rule);margin-left:6px}
+.step{position:relative;padding:0 0 30px 28px}
+.step::before{content:"";position:absolute;left:-8px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:3px solid var(--acc)}
+.step.now::before{background:var(--acc)}
+.step .when{font:600 12px var(--mono);color:var(--mute);letter-spacing:.06em}
+.step h3{font-size:20px;margin-top:4px}
+.step p{color:var(--mute);margin-top:6px;max-width:44em}
+
+/* contact */
+.contact{background:var(--ink);color:var(--bg);border-radius:20px;padding:clamp(28px,5vw,56px);display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:end}
+@media (max-width:760px){.contact{grid-template-columns:1fr}}
+.contact h2{color:var(--bg)}
+.contact p{opacity:.75;margin-top:12px;max-width:30em}
+.contact .rows{display:grid;gap:10px}
+.crow{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid color-mix(in srgb,var(--bg) 22%,transparent);border-radius:10px;padding:10px 12px}
+.crow span{font:500 14px var(--mono);overflow-wrap:anywhere}
+.crow a,.crow button{color:var(--bg);font:600 13px var(--body);background:color-mix(in srgb,var(--bg) 14%,transparent);border:0;border-radius:7px;padding:6px 10px;text-decoration:none;cursor:pointer;white-space:nowrap}
+footer{padding-block:28px 40px;color:var(--mute);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+/* hero layout v2 */
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(28px,4vw,56px);align-items:center}
+@media (max-width:960px){.hero-grid{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(46px,6.4vw,78px);line-height:.95;font-weight:800;letter-spacing:-.035em;margin-top:22px}
+.hero h1 span{color:var(--acc);display:block;font-size:.4em;line-height:1.15;margin-top:.45em;letter-spacing:-.015em;font-weight:700}
+.reel-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.reel-hint{font-size:13px;color:var(--mute)}
+.reel .reel-cap,.reel-cap{display:block;background:none;padding:0;font-size:14px;color:var(--mute);margin-top:12px;line-height:1.5}
+.reel-cap a{font-weight:600;white-space:nowrap;color:var(--acc)}
+.panel .pipe li{padding-left:0}.panel .pipe li::before{display:none}
+.proof{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:clamp(36px,5vw,56px);border-top:1px solid var(--rule)}
+.proof div{padding:18px 18px 0 0}
+@media (max-width:560px){.proof{grid-template-columns:repeat(2,1fr);row-gap:14px}}
+/* AIRCC pipeline list */
+.pipe{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.pipe li{display:grid;grid-template-columns:30px 1fr;gap:14px;padding:12px 0;border-top:1px solid var(--rule)}
+.pipe li:first-child{border-top:0;padding-top:4px}
+.pipe i{font:600 12px var(--mono);font-style:normal;width:30px;height:30px;border-radius:8px;background:var(--acc-soft);color:var(--acc);display:grid;place-items:center}
+.pipe b{display:block;font-weight:600}
+.pipe span{color:var(--mute);font-size:15px}
+/* demo dashboard */
+.dash{margin-top:14px;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px;display:grid;gap:12px}
+.dash-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px;color:var(--mute)}
+.dash-head b{color:var(--ink)}
+.demo-tag{font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--amber);background:var(--amber-soft);border-radius:6px;padding:4px 8px}
+.dash-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.dash-kpis div{background:var(--sunk);border-radius:10px;padding:10px 12px}
+.dash-kpis span{display:block;font-size:12px;color:var(--mute);line-height:1.3}
+.dash-kpis b{font:800 24px/1.2 var(--display);font-variant-numeric:tabular-nums}
+#spark{width:100%;height:110px;display:block}
+#spark .grid{stroke:var(--rule);stroke-width:1}
+#spark .area{fill:var(--acc);opacity:.12}
+#spark .ln{fill:none;stroke:var(--acc);stroke-width:2;vector-effect:non-scaling-stroke}
+#spark .pt{fill:var(--acc)}
+.feed{list-style:none;margin:0;padding:0;display:grid;gap:10px;align-content:start;min-height:150px}
+.feed li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;font-size:13.5px;animation:feedin .4s ease-out}
+.feed b{font:600 12px var(--mono)}
+.feed small{display:block;color:var(--mute);font-size:12px}
+.sev{font:600 10.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 6px;margin-top:1px}
+.sev.warn{background:var(--amber-soft);color:var(--amber)}
+.sev.crit{background:color-mix(in srgb,#e5484d 16%,transparent);color:#d33a40}
+.sev.info{background:var(--acc-soft);color:var(--acc)}
+.sev.ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+@keyframes feedin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+/* v3: hero photo + roles */
+.hero-id{display:flex;align-items:center;gap:clamp(16px,2.4vw,26px);margin-top:22px}
+.hero-id h1{margin-top:0}
+.me{flex:none;width:clamp(96px,11vw,140px);aspect-ratio:4/5;border-radius:22px;overflow:hidden;margin:0;position:relative;background:var(--acc-soft);box-shadow:var(--shadow)}
+.me img{width:100%;height:100%;object-fit:cover;filter:saturate(.88) contrast(1.03)}
+.me::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,transparent 55%,color-mix(in srgb,var(--acc) 22%,transparent));mix-blend-mode:multiply;pointer-events:none}
+.roles{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:22px;font-size:14px;color:var(--mute)}
+.roles b{font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin-right:4px}
+.roles span{font-weight:600;border-radius:8px;padding:5px 10px}
+.roles .pri{background:var(--acc);color:var(--acc-ink)}
+.roles .sec{border:1px solid var(--rule);color:var(--ink);background:var(--surface)}
+@media (max-width:480px){.hero-id{flex-direction:column;align-items:flex-start}}
+/* v3: uniform project cards */
+.grid{align-items:stretch}
+.card{gap:10px}
+.card .viz{aspect-ratio:16/10;border-radius:10px;overflow:hidden;background:#0f1229;border:1px solid var(--rule);margin-bottom:4px}
+.card .viz canvas,.card .viz img{width:100%;height:100%;display:block;object-fit:cover;border:0;border-radius:0;aspect-ratio:auto}
+.card .viz.term{padding:14px 16px;font:400 12px/1.65 var(--mono);color:#c9cdf0;display:flex;flex-direction:column;gap:2px;position:relative}
+.t-u{color:#eceef8;font-weight:600}.t-c{color:#9aa3ff;overflow-wrap:anywhere}.t-a{color:#9fe0b9}
+.t-tag{position:absolute;right:10px;bottom:8px;font-size:10px;color:#7c82aa;letter-spacing:.06em;text-transform:uppercase}
+.card .viz.flow{display:flex;flex-direction:column;justify-content:center;gap:3px;padding:12px 14px;color:#c9cdf0}
+.viz.flow div{background:#1d2245;border:1px solid #2b315c;border-radius:8px;padding:6px 10px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.viz.flow b{font:600 13px var(--body);color:#eceef8}
+.viz.flow span{font:400 11px var(--mono);color:#959bc0;text-align:right}
+.viz.flow i{font-style:normal;color:#7c88ff;font-size:11px;line-height:1;text-align:center;transform:rotate(90deg)}
+.card .stack{margin-top:auto;padding-top:6px}
+.card-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:12px;border-top:1px solid var(--rule);font-weight:600;font-size:14px}
+.linkbtn{font:600 14px var(--body);color:var(--acc);background:none;border:0;cursor:pointer;padding:0}
+#codedlg{border:0;padding:0;background:transparent;width:min(760px,calc(100vw - 32px))}
+#codedlg::backdrop{background:rgba(15,18,41,.6)}
+#codedlg pre{max-height:70vh}
+/* v3: skills */
+.skills{display:grid;grid-template-columns:repeat(2,1fr);gap:0 40px}
+.sk{padding:18px 0;border-top:1px solid var(--rule)}
+.sk h3{font-size:17px;margin-bottom:6px}
+.sk p{color:var(--mute);font-size:15.5px;line-height:1.7}
+@media (max-width:760px){.skills{grid-template-columns:1fr}}
+/* v3: experience */
+.exp{background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:clamp(20px,3vw,32px);display:grid;gap:14px;max-width:900px}
+.exp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.exp .when{font:600 12px var(--mono);color:var(--ok);letter-spacing:.08em}
+.exp h3{font-size:24px;margin-top:6px}
+.exp .org{color:var(--mute);margin-top:4px}
+.exp ul{margin:0;padding-left:20px;display:grid;gap:8px}
+.exp li::marker{color:var(--acc)}
+.livebtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;text-decoration:none;background:var(--acc);color:var(--acc-ink)!important;border-radius:8px;padding:6px 12px}
+.livebtn i{width:7px;height:7px;border-radius:50%;background:#4cc38a;box-shadow:0 0 0 3px rgba(76,195,138,.3)}
+.links{align-items:center}
+.footl{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.card-foot .livebtn{font-size:13px;padding:5px 10px}
+</style>
+</head>
+<body>
+<nav aria-label="Main">
+  <div class="wrap">
+    <a class="mark" href="#top"><i>MS</i>Michal Sprung</a>
+    <div class="navlinks"><a href="#work">Work</a><a href="#more">Projects</a><a href="#toolbox">Skills</a><a href="#path">Experience</a><a href="#contact">Contact</a></div>
+    <button class="iconbtn" id="themebtn" aria-label="Toggle colour theme" title="Toggle theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-intro">
+        <span class="nowpill"><b></b>Now: AI Data Analyst on the Compute Efficiency Platform · Nebius × AIRCC</span>
+        <div class="hero-id"><figure class="me" id="me" hidden><img src="img/me.webp" alt="Michal Sprung"></figure><h1>Michal Sprung<span>AI engineer: GenAI, ML &amp; computer vision.</span></h1></div>
+        <p class="lede">I build AI systems you can <strong>watch working</strong>: LLM agents that stop and ask a human before acting, ML and computer-vision pipelines, and the data platform that shows where a GPU cluster's hours actually go. Underneath is real software engineering: layered, tested code and a real-time engine with its own multiplayer server.</p>
+        <div class="roles"><b>Open to</b><span class="pri">AI Engineer</span><span class="pri">GenAI Engineer</span><span class="pri">ML Engineer</span><span class="pri">CV Engineer</span><span class="sec">Full-stack</span><span class="sec">Backend</span></div>
+        <div class="cta">
+          <a class="btn primary" href="#work">See the work ↓</a>
+          <a class="btn" href="https://github.com/michal329" target="_blank" rel="noopener">GitHub ↗</a>
+          <a class="btn" href="#contact">Contact</a>
+        </div>
+      </div>
+      <aside class="reel-block" aria-label="Project reel">
+        <div class="reel-head"><span class="label">Project reel</span><span class="reel-hint">3 short films · pick one</span></div>
+        <div class="reel" id="reel">
+          <div class="reel-tabs" role="tablist" aria-label="Project reel">
+            <button role="tab" aria-selected="true" data-v="agent">Research agent</button>
+            <button role="tab" aria-selected="false" data-v="aircc">AIRCC pipeline</button>
+            <button role="tab" aria-selected="false" data-v="chess">Chess engine</button>
+          </div>
+          <video id="reelvid" src="media/agent-hitl.mp4" poster="media/agent-poster.jpg" muted autoplay loop playsinline preload="metadata"></video>
+        </div>
+        <p class="reel-cap"><span id="reelcap">Motion walkthrough of the human-in-the-loop flow: search → pause → review → resume.</span> <a href="#agent" id="reellink">Read the case study ↓</a></p>
+      </aside>
+    </div>
+</div>
+</header>
+
+<main>
+<section id="work" style="padding-top:24px">
+  <div class="wrap">
+    <div class="sec-head"><span class="label">Selected work</span><div><h2>Three systems, shown working.</h2><p>Each case shows the product, my part in it, and real code from the repository.</p></div></div>
+
+    <!-- Agent -->
+    <article class="case" id="agent">
+      <div class="media">
+        <figure class="frame">
+          <video src="media/agent-hitl.mp4" poster="media/agent-poster.jpg" controls playsinline preload="none" id="agentvid"></video>
+          <figcaption><span>Motion walkthrough recreating the app's real flow; sources shown are illustrative</span><span class="vctl" data-for="agentvid"><button data-rate="1" aria-pressed="true">1×</button><button data-rate="0.75" aria-pressed="false">0.75×</button></span></figcaption>
+        </figure>
+        <div class="code" style="margin-top:14px"><div class="code-head"><span>agents/info_agent.py</span><button data-copy>Copy</button></div>
+<pre><code class="language-python">llm = ChatGroq(
+    model=settings.GROQ_MODEL,
+    temperature=0.2,
+    model_kwargs={"parallel_tool_calls": False},  # never search + approve in one turn
+)
+
+agent = create_agent(
+    model=llm,
+    tools=[search, approve],
+    system_prompt=system_prompt,
+    middleware=[HumanInTheLoopMiddleware(interrupt_on={"approve": True})],
+    checkpointer=MemorySaver(),
+)</code></pre>
+        <p class="why">The checkpoint lives in the graph, not in the prompt. The <span class="mono">approve</span> tool always interrupts, and parallel tool calls are off, so the model can't self-approve its own search results.</p></div>
+      </div>
+      <div>
+        <span class="label">Generative AI · agents</span>
+        <h3 style="margin-top:10px">LangChain HITL Research Agent</h3>
+        <div class="meta"><span class="badge amber">Human-in-the-loop</span><span>LangGraph · Groq · Tavily · Streamlit</span></div>
+        <p class="summary">An autonomous research assistant that searches the web, groups what it finds, then <b>pauses its own graph</b> until a person approves the sources. Only then does it write the report. Reviewers can approve a subset, or reject with feedback that sends the agent back to search.</p>
+        <div class="tabs" role="tablist" data-group="agent">
+          <button role="tab" aria-selected="true" data-tab="agent-how">How it works</button>
+          <button role="tab" aria-selected="false" data-tab="agent-code">Resume protocol</button>
+        </div>
+        <div class="panel" id="agent-how">
+          <ul>
+            <li><b>Search.</b> The agent calls Tavily, and results are cached in a thread-safe source service.</li>
+            <li><b>Interrupt.</b> The agent proposes sources through the <span class="mono">approve</span> tool, and middleware halts the LangGraph run.</li>
+            <li><b>Review board.</b> A Streamlit panel lets the reviewer filter, check or uncheck sources, then approve (4/5) or reject with notes.</li>
+            <li><b>Resume.</b> An <i>Edit</i> command rewrites the paused tool call so it carries only the approved sources. A <i>Reject</i> command returns the feedback to the model.</li>
+            <li>Clean service architecture (UI ↔ services ↔ tools) and a fully mocked pytest suite.</li>
+          </ul>
+        </div>
+        <div class="panel" id="agent-code" hidden>
+          <div class="code"><div class="code-head"><span>services/approval_service.py</span><button data-copy>Copy</button></div>
+<pre><code class="language-python">def build_approval_command(selected_sources) -&gt; Command:
+    """Resume the paused graph with only the sources the human kept."""
+    decision = {
+        "type": "edit",
+        "edited_action": {
+            "name": "approve",
+            "args": {"sources": format_approved_sources(selected_sources)},
+        },
+    }
+    return Command(resume={"decisions": [decision]})
+
+
+def build_rejection_command(feedback: str) -&gt; Command:
+    """Send the reviewer's notes back; the agent searches again."""
+    return Command(resume={"decisions": [{"type": "reject", "message": feedback}]})</code></pre></div>
+        </div>
+        <div class="stack"><span>Python</span><span>LangChain</span><span>LangGraph</span><span>Groq</span><span>Tavily</span><span>Streamlit</span><span>pytest</span></div>
+        <div class="links"><a class="livebtn" href="https://claude.ai/artifact/NunsMJfhLG43n4eVp2nHX5" target="_blank" rel="noopener"><i></i>Try the live demo ↗</a><a href="https://github.com/michal329/LangChain_HITL_Research_Agent" target="_blank" rel="noopener">Repository ↗</a></div>
+      </div>
+    </article>
+
+    <!-- AIRCC -->
+    <article class="case flip" id="aircc">
+      <div class="media">
+        <figure class="frame">
+          <video id="airccvid" src="media/aircc-pipeline.mp4" poster="media/aircc-poster.jpg" controls playsinline preload="none"></video>
+          <figcaption><span>Pipeline walkthrough (36 s): ingest → store → detect → alert → report. All values are synthetic.</span><span class="vctl" data-for="airccvid"><button data-rate="1" aria-pressed="true">1×</button><button data-rate="0.75" aria-pressed="false">0.75×</button></span></figcaption>
+        </figure>
+        <div class="dash" aria-label="Demo dashboard with synthetic data">
+          <div class="dash-head"><span><b>Fleet monitor</b> · last 60 min</span><span class="demo-tag">Live demo · synthetic data</span></div>
+          <div class="dash-kpis">
+            <div><span>Fleet GPU utilisation</span><b id="k-util">—</b></div>
+            <div><span>Idle GPUs now</span><b id="k-idle">—</b></div>
+            <div><span>Open findings</span><b id="k-find">—</b></div>
+          </div>
+          <svg id="spark" viewBox="0 0 520 120" preserveAspectRatio="none" role="img" aria-label="Synthetic fleet GPU utilisation over the last hour"></svg>
+          <ul id="feed" class="feed" aria-live="polite"></ul>
+        </div>
+      </div>
+      <div>
+        <span class="label">For Nebius × AIRCC · team project</span>
+        <h3 style="margin-top:10px">Compute Efficiency Platform</h3>
+        <div class="meta"><span class="badge">In development</span><span>My role: AI Data Analyst</span><span>4-engineer team</span></div>
+        <p class="summary">AIRCC is an AI research and computing center run by a <b>university consortium</b>. GPUs are its most expensive resource, and nobody could see which GPU-hours do useful work. Together with <b>Nebius</b>, we're building the platform that collects cluster data live, detects waste, alerts the right people and reports utilisation for any time window.</p>
+        <div class="tabs" role="tablist" data-group="aircc">
+          <button role="tab" aria-selected="true" data-tab="aircc-pipe">Pipeline</button>
+          <button role="tab" aria-selected="false" data-tab="aircc-role">My part</button>
+          <button role="tab" aria-selected="false" data-tab="aircc-code">Code</button>
+        </div>
+        <div class="panel" id="aircc-pipe">
+          <ol class="pipe">
+            <li><i>1</i><div><b>Ingest</b><span>SLURM <span class="mono">sacct</span>, SLURM REST (JWT), a live metrics API and flat-file exports, normalised into one canonical job schema. Switching source is configuration, not code.</span></div></li>
+            <li><i>2</i><div><b>Store</b><span>A polling collector writes through to a TimescaleDB hypertable, with backfill and per-source progress tracking.</span></div></li>
+            <li><i>3</i><div><b>Detect</b><span>Rules for idle GPUs, CPU bottlenecks, I/O stalls and over-reservation, plus unsupervised clustering. YAML thresholds are evaluated against ground-truth cases.</span></div></li>
+            <li><i>4</i><div><b>Alert</b><span>Findings go to a configurable channel with the evidence attached.</span></div></li>
+            <li><i>5</i><div><b>Report</b><span>A FastAPI service serves <span class="mono">/findings</span>, <span class="mono">/reports/{project}</span> and <span class="mono">/utilization?window=3d&amp;by=project</span>, plus a CLI and a chart per analysis question.</span></div></li>
+          </ol>
+        </div>
+        <div class="panel" id="aircc-role" hidden>
+          <ul>
+            <li><b>Data foundation.</b> I mapped and documented the SLURM accounting fields, then built the shared data loader the whole team's analyses run on: resource strings, memory units, node ranges, job states and timestamps.</li>
+            <li><b>Analysis.</b> I consolidated the team's waste analyses onto that loader and turned each question into a reproducible script.</li>
+            <li><b>Machine learning.</b> I built the first GPU under-utilisation detector, using unsupervised KMeans clustering over job metrics, then moved its thresholds and alert channel into configuration.</li>
+            <li><b>Visualisation.</b> A reusable charting module, wired into every analysis script.</li>
+            <li><b>Infrastructure.</b> A TimescaleDB dev stack in Docker and a Claude Code ↔ SLURM tooling scaffold.</li>
+            <li><b>Client-facing.</b> I present the workflow and progress to the client, and work through PR reviews with the team lead.</li>
+          </ul>
+        </div>
+        <div class="panel" id="aircc-code" hidden>
+          <div class="code"><div class="code-head"><span>libs/aircc_load.py · expand_nodes() (excerpt)</span><button data-copy>Copy</button></div>
+<pre><code class="language-python">def expand_nodes(node_list) -&gt; list[str]:
+    """Expand a Slurm node_list string into individual node names.
+
+        expand_nodes("node-[01-03,07]")
+        -&gt; ['node-01', 'node-02', 'node-03', 'node-07']
+    """
+    if node_list in NULL_NODES:
+        return []
+    s = node_list.strip()
+    if "[" not in s:
+        return [p.strip() for p in s.split(",") if p.strip()]
+
+    # split on commas that are NOT inside brackets, so "a-[1,2],b-[3]" works
+    parts, depth, buf = [], 0, []
+    for ch in s:
+        if ch == "[":
+            depth += 1
+        elif ch == "]":
+            depth -= 1
+        if ch == "," and depth == 0:
+            parts.append("".join(buf))
+            buf = []
+        else:
+            buf.append(ch)
+    parts.append("".join(buf))
+
+    out = []
+    for part in parts:
+        m = _BRACKET.search(part.strip())
+        if not m:
+            out.append(part.strip())
+            continue
+        prefix, suffix = part[: m.start()], part[m.end():]
+        for token in m.group(1).split(","):
+            if "-" in token:
+                lo_s, hi_s = token.split("-", 1)
+                width = len(lo_s)  # preserve zero-padding, e.g. 01..09
+                for n in range(int(lo_s), int(hi_s) + 1):
+                    out.append(f"{prefix}{str(n).zfill(width)}{suffix}")
+            else:
+                out.append(f"{prefix}{token}{suffix}")
+    return out</code></pre>
+          <p class="why">Node counts are only right once compressed ranges are expanded. This is one of the normalisation steps every downstream analysis depends on.</p></div>
+        </div>
+        <div class="stack"><span>Python</span><span>pandas</span><span>scikit-learn</span><span>FastAPI</span><span>TimescaleDB</span><span>SLURM</span><span>Docker</span><span>matplotlib</span><span>pytest</span></div>
+      </div>
+    </article>
+
+    <!-- Chess -->
+    <article class="case" id="chess">
+      <div class="media">
+        <figure class="frame">
+          <div class="vwrap"><video id="kfvid" src="media/kfchess-engine.mp4" poster="media/kfchess-poster.jpg" muted loop playsinline autoplay preload="metadata" style="aspect-ratio:800/860"></video><div class="capbar"><span id="kfcap"></span></div></div>
+          <figcaption><span>Real engine footage: my <span class="mono">GameEngine</span> and <span class="mono">BoardRenderer</span>, driven by a script and recorded frame by frame</span></figcaption>
+        </figure>
+      </div>
+      <div>
+        <span class="label">Real-time systems · game engine</span>
+        <h3 style="margin-top:10px">Kung Fu Chess</h3>
+        <div class="meta"><span class="badge">Client–server</span><span>Python · pygame · websockets · Docker</span></div>
+        <p class="summary">Chess with the turns removed. Both players move whenever they like, pieces take visible travel time, every arrival triggers a cooldown, and a piece can <b>jump</b> to dodge. An attacker that lands on an airborne piece is destroyed instead.</p>
+        <div class="tabs" role="tablist" data-group="chess">
+          <button role="tab" aria-selected="true" data-tab="chess-play">Play it</button>
+          <button role="tab" aria-selected="false" data-tab="chess-arch">Architecture</button>
+          <button role="tab" aria-selected="false" data-tab="chess-code">Code</button>
+        </div>
+        <div class="panel" id="chess-play">
+          <div class="kf">
+            <div id="board" aria-label="Playable Kung Fu Chess board"></div>
+            <div class="kf-side">
+              <div id="kfstatus">You play White. Black moves on its own.</div>
+              <div class="rule"><i>1</i><span><b>No turns.</b> Click a white piece, then a highlighted square.</span></div>
+              <div class="rule"><i>2</i><span><b>Travel time.</b> Pieces fly square by square, so you can dodge.</span></div>
+              <div class="rule"><i>3</i><span><b>Jump.</b> Click a selected piece again. An attacker landing on it mid-air dies.</span></div>
+              <div class="rule"><i>4</i><span><b>Win</b> by capturing the king.</span></div>
+              <button class="btn" id="kfreset" style="justify-self:start">Restart</button>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--mute);margin-top:12px">A compact JavaScript port of the rules for the browser, using the project's real sprite art. The original engine is Python.</p>
+        </div>
+        <div class="panel" id="chess-arch" hidden>
+          <ul>
+            <li><b>Stateless engine.</b> <span class="mono">GameEngine</span> takes an explicit <span class="mono">GameState</span> on every call and keeps no game state on <span class="mono">self</span>, so the same engine runs offline tests and the server.</li>
+            <li><b>Registry-dispatched piece rules</b> (<span class="mono">dict[kind → rule_fn]</span>) instead of if/elif chains. Value-object model: <span class="mono">Position</span>, <span class="mono">Piece</span>, <span class="mono">Board</span>.</li>
+            <li><b>Observer events.</b> Rendering, move history and the server's network bridge all subscribe to the engine. None of them is referenced by it.</li>
+            <li><b>A deterministic test DSL</b> (<span class="mono">Board:</span> / <span class="mono">Commands:</span> with <span class="mono">wait &lt;ms&gt;</span>) replays real-time scenarios exactly, without sleeping.</li>
+            <li><b>Multiplayer server.</b> A websocket gateway, room manager, matchmaking, ratings, a SQLite user store and Docker Compose, plus a written design for scaling to 100M users (sharded game servers, NATS, Redis, PostgreSQL).</li>
+            <li>Synthesised from three independent implementations, keeping the strongest design decision from each.</li>
+          </ul>
+        </div>
+        <div class="panel" id="chess-code" hidden>
+          <div class="code"><div class="code-head"><span>kfchess/engine/game_engine.py · _resolve_due_move()</span><button data-copy>Copy</button></div>
+<pre><code class="language-python">vacated = {pm.from_pos for pm in state.pending}
+effective_board = _VacatedOriginsView(state.board, vacated)
+
+# Anything at rest on the route stops the mover one square short.
+stop_pos = self._collision_resolver.stop_before_block(pending_move, effective_board)
+if stop_pos is not None:
+    if stop_pos != pending_move.from_pos:
+        state.board.move(pending_move.from_pos, stop_pos)
+        self._set_cooldown(state, stop_pos)
+        self._notify(MoveCompletedEvent(...))
+    return
+
+# Landing on an airborne enemy: the jump wins, the attacker is removed.
+defender = self._collision_resolver.airborne_defender(
+    pending_move.to_pos, pending_move.piece.color, state.airborne)
+if defender is not None:
+    state.board.set(pending_move.from_pos, None)
+    self._notify(AirborneCaptureEvent(defender=defender.piece,
+                                      pos=defender.pos,
+                                      attacker=pending_move.piece))
+    return</code></pre>
+          <p class="why">Nothing is reserved when a move is queued. Collisions are decided by what is actually at rest at the moment of arrival, which keeps the rules uniform and testable.</p></div>
+        </div>
+        <div class="stack"><span>Python</span><span>pygame</span><span>asyncio</span><span>websockets</span><span>SQLite</span><span>Docker</span><span>Observer</span><span>SOLID</span><span>pytest</span></div>
+        <div class="links"><a class="livebtn" href="demos/chess/" target="_blank" rel="noopener"><i></i>Play full screen ↗</a><a href="https://github.com/michal329/KungFuChess" target="_blank" rel="noopener">Repository ↗</a></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="more" style="background:var(--sunk)">
+  <div class="wrap">
+    <div class="sec-head"><span class="label">More projects</span><div><h2>Agents, ML, computer vision and full-stack apps.</h2><p>Smaller builds, each focused on one technique. Open "View code" to read the core of each.</p></div></div>
+    <div class="grid" id="cards">
+
+      <article class="card">
+        <div class="viz"><canvas id="hand" width="480" height="300" aria-label="Animated hand-landmark HUD cycling through gestures"></canvas></div>
+        <span class="kind">Computer vision · ML</span>
+        <h3>Hybrid Gesture Mouse</h3>
+        <p>Control the cursor with your hand. MediaPipe tracks 21 landmarks, and a Random Forest classifies them into 6 postures. EMA smoothing, majority voting and confidence gating keep it stable. Input reaches the OS through Win32 calls.</p>
+        <div class="stack"><span>MediaPipe</span><span>scikit-learn</span><span>OpenCV</span><span>state machine</span></div>
+        <div class="card-foot"><a href="https://github.com/michal329/hybrid-gesture-mouse" target="_blank" rel="noopener">Repository ↗</a><button class="linkbtn" data-code="code-gesture">View code</button></div>
+        <template id="code-gesture" data-file="tracking/normalization.py"><pre><code class="language-python">coords = np.array([[lm.x, lm.y, lm.z] for lm in hand_landmarks.landmark])
+centered = coords - coords[0]                 # translation invariance: wrist at origin
+scale = np.linalg.norm(centered[9]) or 1.0    # wrist → middle-finger MCP
+return (centered / scale).flatten().tolist()  # 63-dim, scale invariant</code></pre></template>
+      </article>
+
+      <article class="card">
+        <div class="viz term" aria-hidden="true">
+          <div class="t-u">› What's the weather in Haifa tomorrow?</div>
+          <div class="t-c">→ weather-Israel__open_weather_forecast_israel()</div>
+          <div class="t-c">→ weather-Israel__enter_weather_forecast_city_israel(city="Haifa")</div>
+          <div class="t-c">→ weather-Israel__get_weather_page_content_israel()</div>
+          <div class="t-a">Claude: Here's tomorrow's forecast for Haifa…</div>
+          <div class="t-tag">example session</div>
+        </div>
+        <span class="kind">Claude · MCP · browser automation</span>
+        <h3>Multi-server MCP agent</h3>
+        <p>A Claude-powered host that discovers tools across several MCP servers and namespaces them so names never collide. It loops on tool calls until the task is done. The tool servers drive a real browser with Playwright, so one question replaces a manual click-through lookup.</p>
+        <div class="stack"><span>Anthropic API</span><span>MCP</span><span>Playwright</span><span>asyncio</span></div>
+        <div class="card-foot"><a href="https://github.com/michal329/Weather-MCP-with-Playwright" target="_blank" rel="noopener">Repository ↗</a><button class="linkbtn" data-code="code-mcp">View code</button></div>
+        <template id="code-mcp" data-file="host.py · tool namespacing"><pre><code class="language-python">for client in self.mcp_clients:
+    response = await client.session.list_tools()
+    for tool in response.tools:
+        exposed_name = f"{client.client_name}__{tool.name}"
+        if exposed_name in self.tool_clients:
+            raise RuntimeError(f"Duplicate tool name detected: {exposed_name}")
+        self.tool_clients[exposed_name] = (client, tool.name)
+        available_tools.append({
+            "name": exposed_name,
+            "description": f"[{client.client_name}] {tool.description}",
+            "input_schema": tool.inputSchema,
+        })</code></pre></template>
+      </article>
+
+      <article class="card">
+        <div class="viz term" aria-hidden="true">
+          <div class="t-u">› Add a task: send the weekly report by Friday</div>
+          <div class="t-c">→ add_task(title="Send weekly report", task_type="work", end_date="2026-10-02")</div>
+          <div class="t-a">Added "Send weekly report", due Friday.</div>
+          <div class="t-tag">example session</div>
+        </div>
+        <span class="kind">Gemini · function calling</span>
+        <h3>Conversational task agent</h3>
+        <p>Task management through conversation. Gemini function calling routes each request to the right operation. The agent loop runs the tool, feeds the result back and repeats until it can answer.</p>
+        <div class="stack"><span>Google Gemini</span><span>function calling</span><span>Python</span></div>
+        <div class="card-foot"><span class="footl"><a class="livebtn" href="https://claude.ai/artifact/VZDNUSdz9ZaUQd7BEtf866" target="_blank" rel="noopener"><i></i>Live demo ↗</a><a href="https://github.com/michal329/function-calling-project" target="_blank" rel="noopener">Repository ↗</a></span><button class="linkbtn" data-code="code-fc">View code</button></div>
+        <template id="code-fc" data-file="agent_service.py · dispatch"><pre><code class="language-python">FUNCTIONS = {
+    "get_tasks": todo_service.get_tasks,
+    "add_task": todo_service.add_task,
+    "delete_task": todo_service.delete_task,
+}
+# each FunctionDeclaration carries a JSON schema the model fills in;
+# the loop executes FUNCTIONS[call.name](**call.args) and replies with the result</code></pre></template>
+      </article>
+
+      <article class="card">
+        <div class="viz flow" aria-hidden="true">
+          <div><b>Markdown docs</b><span>load + chunk</span></div><i>→</i>
+          <div><b>Cohere</b><span>embeddings</span></div><i>→</i>
+          <div><b>Pinecone</b><span>vector index</span></div><i>→</i>
+          <div><b>LLM + Gradio</b><span>answer with sources</span></div>
+        </div>
+        <span class="kind">Retrieval-augmented generation</span>
+        <h3>RAG with LlamaIndex</h3>
+        <p>Question answering over a Markdown knowledge base. Documents are chunked and embedded with Cohere, stored in Pinecone, and retrieved by LlamaIndex to ground each answer. A Gradio UI sits on top.</p>
+        <div class="stack"><span>LlamaIndex</span><span>Cohere</span><span>Pinecone</span><span>Gradio</span></div>
+        <div class="card-foot"><span class="footl"><a class="livebtn" href="https://claude.ai/artifact/HhaPttZhmWy6iQmCgWexk4" target="_blank" rel="noopener"><i></i>Live demo ↗</a><a href="https://github.com/michal329/Rag-with-LamaIndex" target="_blank" rel="noopener">Repository ↗</a></span><button class="linkbtn" data-code="code-rag">View code</button></div>
+        <template id="code-rag" data-file="pipeline (sketch)"><pre><code class="language-python">vector_store = PineconeVectorStore(pinecone_index=index)
+storage = StorageContext.from_defaults(vector_store=vector_store)
+docs = SimpleDirectoryReader("data/md_files").load_data()
+
+index = VectorStoreIndex.from_documents(
+    docs, storage_context=storage,
+    embed_model=CohereEmbedding(...),  # Cohere embeddings
+)
+answer = index.as_query_engine(similarity_top_k=3).query(question)</code></pre></template>
+      </article>
+
+      <article class="card">
+        <div class="viz flow" aria-hidden="true">
+          <div><b>Controllers</b><span>REST · DTO records</span></div><i>→</i>
+          <div><b>Services</b><span>business logic</span></div><i>→</i>
+          <div><b>Repositories</b><span>EF Core</span></div><i>→</i>
+          <div><b>SQL Server</b><span>database-first</span></div>
+        </div>
+        <span class="kind">Backend · .NET</span>
+        <h3>Shop API</h3>
+        <p>A layered e-commerce REST API on .NET 9 using Clean Architecture and dependency injection throughout. It uses immutable record DTOs, AutoMapper, global error-handling middleware and NLog, with unit and integration tests. An Angular storefront consumes it.</p>
+        <div class="stack"><span>C#</span><span>ASP.NET Core</span><span>EF Core</span><span>SQL Server</span><span>Angular</span></div>
+        <div class="card-foot"><span class="footl"><a class="livebtn" href="demos/shop/" target="_blank" rel="noopener"><i></i>Live demo ↗</a><a href="https://github.com/michal329/shopApi" target="_blank" rel="noopener">Repository ↗</a></span><button class="linkbtn" data-code="code-shop">View code</button></div>
+        <template id="code-shop" data-file="ErrorHandlingMiddleware.cs (pattern)"><pre><code class="language-csharp">public async Task Invoke(HttpContext context)
+{
+    try { await _next(context); }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Unhandled exception");
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        await context.Response.WriteAsJsonAsync(new { error = "Something went wrong" });
+    }
+}</code></pre></template>
+      </article>
+
+      <article class="card">
+        <div class="viz"><img src="img/hadasim-map.webp" alt="Live map with blue pins for nearby students and red pins for students more than 3 km away" loading="lazy"></div>
+        <span class="kind">Full stack · maps</span>
+        <h3>School-trip tracker</h3>
+        <p>Teachers see every student on a live map. Anyone more than 3 km from the group is flagged in red, with their exact distance. The UI is fully Hebrew and right-to-left.</p>
+        <div class="stack"><span>React</span><span>Leaflet</span><span>Node / Express</span><span>MSSQL</span></div>
+        <div class="card-foot"><span class="footl"><a class="livebtn" href="demos/trip/" target="_blank" rel="noopener"><i></i>Live demo ↗</a><a href="https://github.com/michal329/hadasim-project" target="_blank" rel="noopener">Repository ↗</a></span></div>
+      </article>
+
+    </div>
+  </div>
+  <dialog id="codedlg" aria-labelledby="codedlg-title">
+    <div class="code"><div class="code-head"><span id="codedlg-title"></span><span style="display:flex;gap:6px"><button data-copy>Copy</button><button id="codedlg-close" aria-label="Close">Close</button></span></div><div id="codedlg-body"></div></div>
+  </dialog>
+</section>
+
+<section id="toolbox">
+  <div class="wrap">
+    <div class="sec-head"><span class="label">Skills &amp; tools</span><div><h2>What I work with.</h2><p>AI first, on a solid software-engineering base.</p></div></div>
+    <div class="skills">
+      <div class="sk wide"><h3>Generative AI &amp; agents</h3><p>AI agents · LLM APIs · Claude API · Prompt engineering · Embeddings · RAG · LlamaIndex · MCP (Model Context Protocol) · LangChain · LangGraph · Groq · Gemini function calling · Streamlit · Gradio · Tesseract OCR</p></div>
+      <div class="sk wide"><h3>Machine learning &amp; computer vision</h3><p>Machine learning · Deep learning · Computer vision · NumPy · pandas · scikit-learn · TensorFlow · PyTorch · OpenCV · MediaPipe · Spark</p></div>
+      <div class="sk"><h3>Programming languages</h3><p>Python · C# · C · C++ · Java · JavaScript · TypeScript · SQL</p></div>
+      <div class="sk"><h3>Backend &amp; web</h3><p>ASP.NET Core · Web API · Entity Framework Core · FastAPI · Node.js · Express · React · Angular · HTML5 · CSS</p></div>
+      <div class="sk"><h3>Automation &amp; integrations</h3><p>REST APIs · JSON · Webhooks · MCP tool servers · Browser automation (Playwright) · Make · n8n · Zapier · ERP (Priority)</p></div>
+      <div class="sk"><h3>Data</h3><p>SQL Server · MySQL · MongoDB · TimescaleDB · BigQuery · Dataform · matplotlib</p></div>
+      <div class="sk"><h3>DevOps &amp; environments</h3><p>Git · GitHub · GitHub Actions · Docker · AWS · Linux · Windows · macOS · SLURM</p></div>
+      <div class="sk"><h3>Engineering practice</h3><p>Algorithms · Data structures &amp; graphs · Design patterns · SOLID · Clean Architecture · Test-driven development · Real-time systems · Finite state machines · Operating systems</p></div>
+      <div class="sk"><h3>Mathematics</h3><p>Calculus · Discrete mathematics · Linear algebra · Statistics &amp; probability</p></div>
+      <div class="sk"><h3>Languages</h3><p>Hebrew (native) · English</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="path" style="background:var(--sunk)">
+  <div class="wrap">
+    <div class="sec-head"><span class="label">Experience</span><div><h2>Where I'm working now.</h2></div></div>
+    <div class="exp">
+      <div class="exp-top"><div><span class="when">CURRENT</span><h3>AI Data Analyst · Compute Efficiency Platform</h3><p class="org">Nebius × AIRCC, via the KamaTech Extra Code industry program</p></div><a class="btn" href="#aircc">See the project ↑</a></div>
+      <p>Selected for the industry-partnered project phase. I'm building the Compute Efficiency Platform for Nebius and AIRCC, an AI research and computing center run by a university consortium, as part of a four-engineer team.</p>
+      <ul>
+        <li>Built the shared data loader and data dictionary that the team's analyses and detection pipeline run on.</li>
+        <li>Built the first ML-based GPU under-utilisation detector (unsupervised clustering) and made its thresholds and alerting configurable.</li>
+        <li>Turned the team's analyses into reproducible scripts with a shared visualisation module.</li>
+        <li>Present progress and findings to the client, and work through code review with the team lead in a Git/PR workflow.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact">
+      <div><h2>Contact</h2><p><b>Looking for AI-focused roles</b>, including <b>AI Engineering, GenAI, ML, and Computer Vision</b>, as well as <b>Full-Stack and Backend Engineering</b> opportunities.</p></div>
+      <div class="rows">
+        <div class="crow"><span id="email">sprung5866769@gmail.com</span><button data-copytext="sprung5866769@gmail.com">Copy</button></div>
+        <div class="crow"><span>Phone · 053-4198035</span><button data-copytext="053-4198035">Copy</button></div>
+        <div class="crow"><span>WhatsApp · 055-5576983</span><a href="https://wa.me/972555576983" target="_blank" rel="noopener">Chat ↗</a></div>
+        <div class="crow"><span>github.com/michal329</span><a href="https://github.com/michal329" target="_blank" rel="noopener">Open ↗</a></div>
+        <div class="crow" id="lirow" hidden><span>LinkedIn</span><a id="lilink" href="#" target="_blank" rel="noopener">Open ↗</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>© 2026 Michal Sprung</span><span>Hand-built page · footage rendered from the projects' own code</span></div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+const LINKEDIN = ''; // e.g. 'https://www.linkedin.com/in/your-handle'
+if (LINKEDIN) { lirow.hidden = false; lilink.href = LINKEDIN; }
+
+/* profile photo: shown once img/me.webp exists */
+(() => { const f = document.getElementById('me'), i = f.querySelector('img'); const ok = () => f.hidden = false; if (i.complete && i.naturalWidth) ok(); else i.addEventListener('load', ok); })();
+
+/* theme toggle */
+themebtn.onclick = () => {
+  const r = document.documentElement, cur = r.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  r.dataset.theme = cur === 'dark' ? 'light' : 'dark';
+};
+
+/* syntax highlight */
+try { hljs.highlightAll(); } catch (e) {}
+
+/* copy buttons */
+function copy(text, btn) {
+  const done = () => { const o = btn.textContent; btn.textContent = 'Copied'; setTimeout(() => btn.textContent = o, 1400); };
+  navigator.clipboard?.writeText(text).then(done, () => { const s = getSelection(), rg = document.createRange(); rg.selectNodeContents(btn.parentElement.parentElement.querySelector('code') || email); s.removeAllRanges(); s.addRange(rg); });
+}
+document.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => copy(b.closest('.code').querySelector('code').innerText, b));
+document.querySelectorAll('[data-copytext]').forEach(b => b.onclick = () => copy(b.dataset.copytext, b));
+
+/* tabs */
+document.querySelectorAll('.tabs').forEach(tl => {
+  const btns = [...tl.querySelectorAll('button')];
+  btns.forEach(b => b.onclick = () => {
+    btns.forEach(x => { x.setAttribute('aria-selected', x === b); document.getElementById(x.dataset.tab).hidden = x !== b; });
+  });
+});
+
+/* video speed controls */
+document.querySelectorAll('.vctl').forEach(c => {
+  const v = document.getElementById(c.dataset.for);
+  c.querySelectorAll('button').forEach(b => b.onclick = () => {
+    v.playbackRate = +b.dataset.rate; c.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  });
+});
+
+/* hero reel */
+const REEL = {
+  agent: ['media/agent-hitl.mp4', 'media/agent-poster.jpg', 'Motion walkthrough of the human-in-the-loop flow: search → pause → review → resume.', '#agent'],
+  aircc: ['media/aircc-pipeline.mp4', 'media/aircc-poster.jpg', 'The Nebius × AIRCC pipeline, end to end: ingest, store, detect, alert, report. Synthetic demo data.', '#aircc'],
+  chess: ['media/kfchess-engine.mp4', 'media/kfchess-poster.jpg', 'Real footage from the Python engine: a pawn jumps to dodge, and the queen dies landing on it.', '#chess'],
+};
+document.querySelectorAll('.reel-tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.reel-tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+  const [src, poster, cap, href] = REEL[b.dataset.v];
+  reelvid.poster = poster; reelvid.src = src; reelvid.muted = true; reelvid.play().catch(() => {});
+  reelcap.textContent = cap; reellink.href = href;
+});
+
+/* engine-footage captions, synced to video time (seconds) */
+const KFC = [[0.2, 2.4, 'Both sides move at once. No turns.'], [2.5, 7.9, 'Moves take travel time: 1 s per square'], [7.9, 9.3, 'Black queues a queen strike on f2…'], [9.3, 10.9, '…f2 jumps. The queen lands on an airborne pawn and is destroyed.'], [11.9, 13.1, 'Shaded square = cooldown after arrival'], [13.1, 17, 'Bishop takes the king. Game over.']];
+kfvid.addEventListener('timeupdate', () => { const t = kfvid.currentTime, c = KFC.find(x => t >= x[0] && t < x[1]); kfcap.textContent = c ? c[2] : ''; kfcap.style.opacity = c ? 1 : 0; });
+
+/* AIRCC demo dashboard: synthetic data only */
+(() => {
+  const spark = document.getElementById('spark'), feed = document.getElementById('feed');
+  let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const N = 60, pts = [];
+  let v = 62;
+  for (let i = 0; i < N; i++) { v = Math.min(92, Math.max(28, v + (rnd() - .5) * 9)); pts.push(v); }
+  const EVENTS = [
+    ['IDLE_GPU', 'warn', 'node-07 · 4 GPUs under 10% for 62 min', 'job 48213 · demo-b'],
+    ['IO_STALL', 'crit', 'node-12 · io_wait 41%', 'storage throughput is limiting the job'],
+    ['CPU_BOTTLENECK', 'crit', 'job 48247 · CPU 97%, GPU 71%', 'GPUs waiting on preprocessing'],
+    ['OVER_RESERVATION', 'info', 'demo-d · 4.1× time reserved vs used', 'shorter limits would cut queue wait'],
+    ['RECOVERED', 'ok', 'node-07 · utilisation back above 60%', 'finding closed automatically'],
+  ];
+  let ev = 0, open = 0;
+  const SEV = { warn: 'Warning', crit: 'Critical', info: 'Insight', ok: 'Resolved' };
+  function push() {
+    const [code, sev, text, sub] = EVENTS[ev++ % EVENTS.length];
+    open = sev === 'ok' ? Math.max(0, open - 1) : Math.min(9, open + 1);
+    const li = document.createElement('li');
+    const now = new Date(); const hh = String(now.getHours()).padStart(2, '0'), mm = String(now.getMinutes()).padStart(2, '0');
+    li.innerHTML = `<span class="sev ${sev}">${SEV[sev]}</span><div><b>${code}</b> ${text}<small>${sub} · ${hh}:${mm}</small></div>`;
+    feed.prepend(li);
+    while (feed.children.length > 3) feed.lastChild.remove();
+  }
+  function draw() {
+    const W = 520, H = 120, x = i => i / (N - 1) * W, y = p => H - 8 - (p - 20) / 80 * (H - 16);
+    const line = pts.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(p).toFixed(1)}`).join(' ');
+    spark.innerHTML =
+      [25, 50, 75].map(g => `<line x1="0" x2="${W}" y1="${y(g)}" y2="${y(g)}" class="grid"/>`).join('') +
+      `<path d="${line} L${W} ${H} L0 ${H}Z" class="area"/><path d="${line}" class="ln"/>` +
+      `<circle cx="${x(N - 1)}" cy="${y(pts[N - 1])}" r="4" class="pt"/>`;
+    const util = pts[N - 1];
+    document.getElementById('k-util').textContent = Math.round(util) + '%';
+    document.getElementById('k-idle').textContent = String(Math.max(0, Math.round((80 - util) / 6)));
+    document.getElementById('k-find').textContent = String(open);
+  }
+  push(); push();
+  draw();
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  setInterval(() => { pts.shift(); const last = pts[pts.length - 1]; pts.push(Math.min(92, Math.max(28, last + (Math.random() - .5) * 10))); draw(); }, 1000);
+  setInterval(push, 4500);
+})();
+
+/* code dialog for project cards */
+document.querySelectorAll('[data-code]').forEach(b => b.onclick = () => {
+  const t = document.getElementById(b.dataset.code);
+  document.getElementById('codedlg-title').textContent = t.dataset.file;
+  const body = document.getElementById('codedlg-body'); body.innerHTML = t.innerHTML;
+  try { body.querySelectorAll('code').forEach(c => hljs.highlightElement(c)); } catch (e) {}
+  const d = document.getElementById('codedlg'); d.showModal ? d.showModal() : d.setAttribute('open', '');
+});
+document.getElementById('codedlg-close').onclick = () => document.getElementById('codedlg').close();
+document.getElementById('codedlg').addEventListener('click', e => { if (e.target.id === 'codedlg') e.target.close(); });
+
+/* ---------- gesture HUD canvas ---------- */
+(() => {
+  const cv = document.getElementById('hand'), g = cv.getContext('2d');
+  const POSES = [
+    ['move', 0.94, [0, 1, 0, 0, 0]], ['click', 0.88, [2, 2, 0, 0, 0]], ['scroll_up', 0.91, [0, 1, 1, 1, 0]], ['idle', 0.97, [1, 1, 1, 1, 1]], ['drag', 0.86, [3, 3, 3, 0, 0]]];
+  const BASE = [[0, 0], [-0.32, -0.18], [-0.12, -0.42], [0.06, -0.46], [0.22, -0.42], [0.36, -0.34]];
+  const DIRS = [[-0.9, -0.6], [-0.25, -1], [0, -1], [0.2, -1], [0.4, -0.92]];
+  const LEN = [0.2, 0.2, 0.22, 0.2, 0.16];
+  function joints(state) {
+    const pts = [[0, 0]];
+    for (let f = 0; f < 5; f++) {
+      const s = state[f], m = BASE[f + 1]; pts.push(m);
+      let [dx, dy] = DIRS[f], p = m;
+      for (let k = 0; k < 3; k++) {
+        let ext = s === 1 || (f === 0 && s === 0 && false);
+        let a = s === 1 ? 0 : s === 0 ? 0.9 + k * 0.6 : 0.35 + k * 0.35; // curl angle per joint
+        if (s >= 2) { // pinch: bend toward thumb/index meeting point
+          const tgt = [-0.18, -0.62]; const q = [p[0] + (tgt[0] - p[0]) * (k + 1) / 3, p[1] + (tgt[1] - p[1]) * (k + 1) / 3]; pts.push(q); p = q; continue;
+        }
+        const ca = Math.cos(a), sa = Math.sin(a), sign = f === 0 ? -1 : 1;
+        const d = [dx * ca - dy * sa * sign, dy * ca + dx * sa * sign];
+        p = [p[0] + d[0] * LEN[f], p[1] + d[1] * LEN[f] * (k ? .9 : 1)]; pts.push(p);
+        if (f === 0 && s === 0) p = p;
+      }
+    }
+    return pts; // 1 + 5*(1+3) = 21
+  }
+  const CH = [[0, 1, 2, 3, 4], [0, 5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16], [0, 17, 18, 19, 20], [5, 9, 13, 17]];
+  let cur = joints(POSES[0][2]), votes = [];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function frame(now) {
+    const W = cv.width, H = cv.height, period = 2600, idx = Math.floor(now / period) % POSES.length, k = (now % period) / period;
+    const target = joints(POSES[idx][2]);
+    cur = cur.map((p, i) => [p[0] + (target[i][0] - p[0]) * .12, p[1] + (target[i][1] - p[1]) * .12]);
+    g.fillStyle = '#0f1229'; g.fillRect(0, 0, W, H);
+    g.strokeStyle = '#2b315c'; g.setLineDash([6, 6]); g.strokeRect(70, 24, 240, 262); g.setLineDash([]);
+    g.font = '600 11px JetBrains Mono, monospace'; g.fillStyle = '#7c82aa'; g.fillText('ACTIVE ZONE', 76, 40);
+    const jitter = t => Math.sin(now / 170 + t) * 1.2;
+    const P = cur.map((p, i) => [190 + p[0] * 215 + jitter(i), 262 + p[1] * 215 + jitter(i * 2)]);
+    g.lineWidth = 3; g.strokeStyle = '#8c96ff';
+    CH.forEach(c => { g.beginPath(); c.forEach((j, n) => n ? g.lineTo(...P[j]) : g.moveTo(...P[j])); g.stroke(); });
+    P.forEach((p, i) => { g.beginPath(); g.arc(p[0], p[1], i % 4 === 0 && i ? 5 : 4, 0, 7); g.fillStyle = i % 4 === 0 && i ? '#f5b342' : '#eceef8'; g.fill(); });
+    // HUD
+    const [name, conf] = POSES[idx];
+    if (Math.floor(now / 200) !== frame.lv) { frame.lv = Math.floor(now / 200); votes.push(k < .18 ? POSES[(idx + POSES.length - 1) % POSES.length][0] : name); votes = votes.slice(-7); }
+    g.fillStyle = '#eceef8'; g.font = '800 22px Bricolage Grotesque, sans-serif'; g.fillText(name, 330, 70);
+    g.font = '600 11px JetBrains Mono, monospace'; g.fillStyle = '#7c82aa'; g.fillText('STATE', 330, 46); g.fillText('CONFIDENCE', 330, 104); g.fillText('VOTES (7)', 330, 160);
+    g.fillStyle = '#2b315c'; g.fillRect(330, 112, 120, 8); g.fillStyle = conf > .75 ? '#4cc38a' : '#f5b342'; g.fillRect(330, 112, 120 * (conf - .04 + Math.sin(now / 300) * .03), 8);
+    votes.forEach((v, i) => { g.fillStyle = v === name ? '#8c96ff' : '#3a3f6e'; g.fillRect(330 + i * 17, 170, 13, 13); });
+    g.fillStyle = '#7c82aa'; g.fillText('EMA α 0.25', 330, 214); g.fillText('debounce 0.4 s', 330, 232); g.fillText((58 + Math.round(Math.sin(now / 900) * 2)) + ' FPS', 330, 250);
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* ---------- playable Kung Fu Chess (browser port) ---------- */
+(() => {
+  const B = document.getElementById('board');
+  const MOVE_MS = 450, COOL_MS = 1100, JUMP_MS = 750;
+  let pieces, sel, over, botT;
+  const START = ['RNBQKBNR', 'PPPPPPPP'];
+  function reset() {
+    pieces = []; sel = null; over = null; botT = performance.now() + 1500;
+    for (let c = 0; c < 8; c++) {
+      pieces.push(mk('B', START[0][c], 0, c), mk('B', 'P', 1, c), mk('W', 'P', 6, c), mk('W', START[0][c], 7, c));
+    }
+    draw();
+  }
+  let uid = 0;
+  function mk(color, kind, r, c) {
+    const el = document.createElement('div'); el.className = 'pc';
+    el.innerHTML = `<img src="img/pieces/${kind}${color}.webp" alt=""><div class="cd"></div>`;
+    return { id: uid++, color, kind, r, c, move: null, jump: null, cool: 0, el };
+  }
+  const now = () => performance.now();
+  const atRest = (r, c) => pieces.find(p => !p.move && p.r === r && p.c === c);
+  const busy = (p, t) => p.move || p.jump || p.cool > t;
+  function legal(p, r, c) {
+    if (r < 0 || r > 7 || c < 0 || c > 7 || (r === p.r && c === p.c)) return false;
+    const dr = r - p.r, dc = c - p.c, ar = Math.abs(dr), ac = Math.abs(dc), tgt = atRest(r, c);
+    if (tgt && tgt.color === p.color) return false;
+    const clear = () => { const sr = Math.sign(dr), sc = Math.sign(dc); for (let i = 1; i < Math.max(ar, ac); i++) if (atRest(p.r + sr * i, p.c + sc * i)) return false; return true; };
+    switch (p.kind) {
+      case 'K': return ar <= 1 && ac <= 1;
+      case 'N': return (ar === 2 && ac === 1) || (ar === 1 && ac === 2);
+      case 'R': return (!dr || !dc) && clear();
+      case 'B': return ar === ac && clear();
+      case 'Q': return (!dr || !dc || ar === ac) && clear();
+      case 'P': {
+        const f = p.color === 'W' ? -1 : 1, home = p.color === 'W' ? 6 : 1;
+        if (dc === 0 && !tgt) return dr === f || (dr === 2 * f && p.r === home && !atRest(p.r + f, c));
+        return ac === 1 && dr === f && !!tgt;
+      }
+    }
+  }
+  function targets(p) { const out = []; for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) if (legal(p, r, c)) out.push([r, c]); return out; }
+  function queue(p, r, c, t) { const d = Math.max(Math.abs(r - p.r), Math.abs(c - p.c)); p.move = { fr: p.r, fc: p.c, r, c, t0: t, t1: t + d * MOVE_MS }; }
+  function resolve(p, t) {
+    const m = p.move; p.move = null;
+    let r = m.r, c = m.c;
+    if (p.kind !== 'N') { // stop short of anything at rest on the route
+      const sr = Math.sign(m.r - m.fr), sc = Math.sign(m.c - m.fc), n = Math.max(Math.abs(m.r - m.fr), Math.abs(m.c - m.fc));
+      for (let i = 1; i < n; i++) if (atRest(m.fr + sr * i, m.fc + sc * i)) { r = m.fr + sr * (i - 1); c = m.fc + sc * (i - 1); break; }
+    }
+    const def = pieces.find(q => q !== p && q.jump && q.r === r && q.c === c && q.color !== p.color);
+    if (def && r === m.r && c === m.c) { kill(p); flash(def.color === 'W' ? `Your ${name(def)} jumped — the attacking ${name(p)} is destroyed` : `Black's ${name(def)} jumped — your ${name(p)} is destroyed`); return; }
+    const occ = atRest(r, c);
+    if (occ && occ !== p) {
+      if (occ.color === p.color || (p.kind === 'P' && c === m.fc)) { // blocked at arrival: stop one square short
+        if (p.kind === 'N') { r = m.fr; c = m.fc; }
+        else { r -= Math.sign(m.r - m.fr); c -= Math.sign(m.c - m.fc); }
+      } else { kill(occ); if (occ.kind === 'K') over = p.color; }
+    }
+    p.r = r; p.c = c; p.cool = t + COOL_MS;
+    if (p.kind === 'P' && (r === 0 || r === 7)) { p.kind = 'Q'; p.el.querySelector('img').src = `img/pieces/Q${p.color}.webp`; }
+  }
+  const name = p => ({ K: 'king', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight', P: 'pawn' })[p.kind];
+  function kill(p) { pieces = pieces.filter(q => q !== p); p.el.remove(); }
+  let flashT = 0, flashMsg = '';
+  function flash(m) { flashMsg = m; flashT = now() + 2200; }
+  function bot(t) {
+    if (t < botT || over) return;
+    botT = t + 650 + Math.random() * 900;
+    const mine = pieces.filter(p => p.color === 'B' && !busy(p, t));
+    // dodge: jump if a white piece is about to land on us
+    for (const w of pieces.filter(p => p.color === 'W' && p.move)) {
+      const v = mine.find(b => b.r === w.move.r && b.c === w.move.c);
+      if (v && w.move.t1 - t < JUMP_MS && Math.random() < .55) { v.jump = { t0: t, t1: t + JUMP_MS }; return; }
+    }
+    const VAL = { K: 50, Q: 9, R: 5, B: 3, N: 3, P: 1 };
+    let best = null, bs = -1;
+    for (const p of mine) for (const [r, c] of targets(p)) {
+      const tg = atRest(r, c); const s = (tg ? VAL[tg.kind] * 3 : 0) + Math.random() * 2 + (p.kind === 'P' ? .6 : 0) + (p.kind === 'K' ? -2 : 0);
+      if (s > bs) { bs = s; best = [p, r, c]; }
+    }
+    if (best) queue(best[0], best[1], best[2], t);
+  }
+  function tick() {
+    const t = now();
+    if (!over) {
+      pieces.filter(p => p.move && p.move.t1 <= t).sort((a, b) => a.move.t1 - b.move.t1).forEach(p => p.move && resolve(p, t));
+      pieces.forEach(p => { if (p.jump && p.jump.t1 <= t) { p.jump = null; p.cool = t + COOL_MS * .5; } });
+      bot(t);
+    }
+    draw(t); requestAnimationFrame(tick);
+  }
+  function draw(t = now()) {
+    if (!B.firstChild) {
+      for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) { const s = document.createElement('div'); s.className = 'sq'; s.style.cssText = `left:${c * 12.5}%;top:${r * 12.5}%;background:${(r + c) % 2 ? '#3b4270' : '#d9dcf0'}`; s.dataset.r = r; s.dataset.c = c; B.appendChild(s); }
+      B.insertAdjacentHTML('beforeend', '<div id="kfmarks"></div>');
+    }
+    pieces.forEach(p => {
+      if (!p.el.parentNode) B.appendChild(p.el);
+      let r = p.r, c = p.c, lift = 0;
+      if (p.move) { const k = Math.min(1, (t - p.move.t0) / (p.move.t1 - p.move.t0)); r = p.move.fr + (p.move.r - p.move.fr) * k; c = p.move.fc + (p.move.c - p.move.fc) * k; lift = Math.sin(k * Math.PI) * 6; }
+      if (p.jump) { const k = (t - p.jump.t0) / (p.jump.t1 - p.jump.t0); lift = Math.sin(k * Math.PI) * 28; }
+      p.el.style.transform = `translate(${c * 100}%,${r * 100 - lift}%) scale(${p.jump ? 1.12 : 1})`;
+      p.el.style.zIndex = p.move || p.jump ? 5 : 2;
+      p.el.style.filter = p.jump ? 'drop-shadow(0 10px 6px rgba(0,0,0,.35))' : '';
+      const cf = !p.move && !p.jump && p.cool > t ? (p.cool - t) / COOL_MS : 0;
+      p.el.querySelector('.cd').style.height = Math.min(100, cf * 100) + '%';
+    });
+    const marks = document.getElementById('kfmarks');
+    let h = '';
+    if (sel && pieces.includes(sel) && !busy(sel, t)) { h += `<div class="sel" style="left:${sel.c * 12.5}%;top:${sel.r * 12.5}%"></div>`; for (const [r, c] of targets(sel)) h += `<div class="dot" style="left:${c * 12.5}%;top:${r * 12.5}%"></div>`; }
+    if (over) h += `<div class="over"><div>${over === 'W' ? 'You win' : 'Black wins'}<small>Click Restart to play again</small></div></div>`;
+    if (marks.innerHTML !== h) marks.innerHTML = h;
+    const st = document.getElementById('kfstatus');
+    const msg = flashT > t ? flashMsg : `White ${pieces.filter(p => p.color === 'W').length} · Black ${pieces.filter(p => p.color === 'B').length}`;
+    if (st.textContent !== msg) st.textContent = msg;
+  }
+  B.addEventListener('click', e => {
+    if (over) return;
+    const rect = B.getBoundingClientRect(), c = Math.floor((e.clientX - rect.left) / rect.width * 8), r = Math.floor((e.clientY - rect.top) / rect.height * 8), t = now();
+    if (sel && sel.r === r && sel.c === c && !busy(sel, t)) { sel.jump = { t0: t, t1: t + JUMP_MS }; sel = null; return; }
+    if (sel && !busy(sel, t) && legal(sel, r, c)) { queue(sel, r, c, t); sel = null; return; }
+    const p = atRest(r, c); sel = p && p.color === 'W' ? p : null;
+  });
+  document.getElementById('kfreset').onclick = () => { pieces?.forEach(p => p.el.remove()); reset(); };
+  reset(); requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

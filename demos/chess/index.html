@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kung Fu Chess</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#f4f5f8; --surface:#ffffff; --sunk:#eceef4; --ink:#151832; --mute:#5b6080; --rule:#dadde8;
+  --acc:#3b47d6; --acc-ink:#ffffff; --acc-soft:#e3e6ff; --amber:#c27c0e; --amber-soft:#fbefd6; --ok:#1f8a5b;
+  --code-bg:#0f1229; --code-ink:#d6d9f2; --code-mute:#7c82aa; --code-k:#9aa3ff; --code-s:#9fe0b9; --code-n:#f5b342; --code-f:#ffb3c7;
+  --shadow:0 1px 0 rgba(21,24,50,.04),0 18px 40px -24px rgba(21,24,50,.28);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1229; --surface:#171b38; --sunk:#131733; --ink:#eceef8; --mute:#9aa0c4; --rule:#2b315c;
+  --acc:#8c96ff; --acc-ink:#0f1229; --acc-soft:#242a5c; --amber:#f5b342; --amber-soft:#3a2f17; --ok:#4cc38a;
+  --code-bg:#0b0e22; --shadow:0 18px 40px -24px rgba(0,0,0,.7); color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0f1229; --surface:#171b38; --sunk:#131733; --ink:#eceef8; --mute:#9aa0c4; --rule:#2b315c;
+  --acc:#8c96ff; --acc-ink:#0f1229; --acc-soft:#242a5c; --amber:#f5b342; --amber-soft:#3a2f17; --ok:#4cc38a;
+  --code-bg:#0b0e22; --shadow:0 18px 40px -24px rgba(0,0,0,.7); color-scheme:dark;}
+
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--body)}
+a{color:var(--acc)}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:28px 48px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:14px}
+.top a{font-weight:600;text-decoration:none}
+.label{font:600 12px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+h1{font:800 clamp(34px,5vw,52px)/1 var(--display);letter-spacing:-.03em;margin:16px 0 8px}
+.lede{color:var(--mute);max-width:44em;margin:0 0 22px}
+.btn{display:inline-flex;align-items:center;height:42px;padding:0 16px;border-radius:10px;font:600 15px var(--body);border:1px solid var(--rule);color:var(--ink);background:var(--surface);cursor:pointer}
+
+.kf{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;margin-top:22px}
+.kf>#board{flex:1 1 280px;max-width:420px}.kf>.kf-side{flex:1 1 190px}
+@media (max-width:760px){.kf{grid-template-columns:1fr}}
+#board{position:relative;width:100%;aspect-ratio:1;border-radius:10px;overflow:hidden;touch-action:manipulation;user-select:none;box-shadow:var(--shadow);border:1px solid var(--rule)}
+#board .sq{position:absolute;width:12.5%;height:12.5%}
+#board .pc{position:absolute;width:12.5%;height:12.5%;pointer-events:none;will-change:transform}
+#board .pc img{width:100%;height:100%}
+#board .cd{position:absolute;left:0;right:0;top:0;background:rgba(15,18,41,.42)}
+#board .dot{position:absolute;width:12.5%;height:12.5%;display:grid;place-items:center;pointer-events:none}
+#board .dot::after{content:"";width:26%;height:26%;border-radius:50%;background:var(--acc);opacity:.75}
+#board .sel{position:absolute;width:12.5%;height:12.5%;box-shadow:inset 0 0 0 3px var(--acc);pointer-events:none}
+#board .over{position:absolute;inset:0;display:grid;place-items:center;background:rgba(15,18,41,.62);color:#fff;text-align:center;font:800 30px var(--display)}
+#board .over small{display:block;font:500 14px var(--body);margin-top:6px}
+.kf-side{display:grid;gap:12px;font-size:14px}
+.kf-side .rule{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;color:var(--mute)}
+.kf-side .rule b{color:var(--ink);font-weight:600}
+.kf-side .rule i{font:600 12px var(--mono);font-style:normal;width:28px;height:28px;border-radius:7px;background:var(--acc-soft);color:var(--acc);display:grid;place-items:center}
+#kfstatus{font:600 13px var(--mono);color:var(--ink)}
+
+
+.kf{margin-top:0}
+.kf>#board{flex:1 1 320px;max-width:560px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span class="label">Kung Fu Chess · playable browser port</span><span><a href="https://github.com/michal329/KungFuChess" target="_blank" rel="noopener">Source on GitHub ↗</a></span></div>
+  <h1>Chess without turns.</h1>
+  <p class="lede">Both sides move at once, pieces take visible travel time, every arrival triggers a cooldown, and a jump destroys any attacker that lands mid-air. A compact JavaScript port of the rules, using the project's own sprite art. The original engine and its websocket multiplayer server are in Python.</p>
+  <div class="kf">
+    <div id="board" aria-label="Playable Kung Fu Chess board"></div>
+    <div class="kf-side">
+      <div id="kfstatus">You play White. Black moves on its own.</div>
+      <div class="rule"><i>1</i><span><b>No turns.</b> Click a white piece, then a highlighted square.</span></div>
+      <div class="rule"><i>2</i><span><b>Travel time.</b> Pieces fly square by square, so you can dodge.</span></div>
+      <div class="rule"><i>3</i><span><b>Jump.</b> Click a selected piece again. An attacker landing on it mid-air dies.</span></div>
+      <div class="rule"><i>4</i><span><b>Win</b> by capturing the king.</span></div>
+      <button class="btn" id="kfreset" style="justify-self:start">Restart</button>
+    </div>
+  </div>
+</div>
+<script>
+/* ---------- playable Kung Fu Chess (browser port) ---------- */
+(() => {
+  const B = document.getElementById('board');
+  const MOVE_MS = 450, COOL_MS = 1100, JUMP_MS = 750;
+  let pieces, sel, over, botT;
+  const START = ['RNBQKBNR', 'PPPPPPPP'];
+  function reset() {
+    pieces = []; sel = null; over = null; botT = performance.now() + 1500;
+    for (let c = 0; c < 8; c++) {
+      pieces.push(mk('B', START[0][c], 0, c), mk('B', 'P', 1, c), mk('W', 'P', 6, c), mk('W', START[0][c], 7, c));
+    }
+    draw();
+  }
+  let uid = 0;
+  function mk(color, kind, r, c) {
+    const el = document.createElement('div'); el.className = 'pc';
+    el.innerHTML = `<img src="img/pieces/${kind}${color}.webp" alt=""><div class="cd"></div>`;
+    return { id: uid++, color, kind, r, c, move: null, jump: null, cool: 0, el };
+  }
+  const now = () => performance.now();
+  const atRest = (r, c) => pieces.find(p => !p.move && p.r === r && p.c === c);
+  const busy = (p, t) => p.move || p.jump || p.cool > t;
+  function legal(p, r, c) {
+    if (r < 0 || r > 7 || c < 0 || c > 7 || (r === p.r && c === p.c)) return false;
+    const dr = r - p.r, dc = c - p.c, ar = Math.abs(dr), ac = Math.abs(dc), tgt = atRest(r, c);
+    if (tgt && tgt.color === p.color) return false;
+    const clear = () => { const sr = Math.sign(dr), sc = Math.sign(dc); for (let i = 1; i < Math.max(ar, ac); i++) if (atRest(p.r + sr * i, p.c + sc * i)) return false; return true; };
+    switch (p.kind) {
+      case 'K': return ar <= 1 && ac <= 1;
+      case 'N': return (ar === 2 && ac === 1) || (ar === 1 && ac === 2);
+      case 'R': return (!dr || !dc) && clear();
+      case 'B': return ar === ac && clear();
+      case 'Q': return (!dr || !dc || ar === ac) && clear();
+      case 'P': {
+        const f = p.color === 'W' ? -1 : 1, home = p.color === 'W' ? 6 : 1;
+        if (dc === 0 && !tgt) return dr === f || (dr === 2 * f && p.r === home && !atRest(p.r + f, c));
+        return ac === 1 && dr === f && !!tgt;
+      }
+    }
+  }
+  function targets(p) { const out = []; for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) if (legal(p, r, c)) out.push([r, c]); return out; }
+  function queue(p, r, c, t) { const d = Math.max(Math.abs(r - p.r), Math.abs(c - p.c)); p.move = { fr: p.r, fc: p.c, r, c, t0: t, t1: t + d * MOVE_MS }; }
+  function resolve(p, t) {
+    const m = p.move; p.move = null;
+    let r = m.r, c = m.c;
+    if (p.kind !== 'N') { // stop short of anything at rest on the route
+      const sr = Math.sign(m.r - m.fr), sc = Math.sign(m.c - m.fc), n = Math.max(Math.abs(m.r - m.fr), Math.abs(m.c - m.fc));
+      for (let i = 1; i < n; i++) if (atRest(m.fr + sr * i, m.fc + sc * i)) { r = m.fr + sr * (i - 1); c = m.fc + sc * (i - 1); break; }
+    }
+    const def = pieces.find(q => q !== p && q.jump && q.r === r && q.c === c && q.color !== p.color);
+    if (def && r === m.r && c === m.c) { kill(p); flash(def.color === 'W' ? `Your ${name(def)} jumped — the attacking ${name(p)} is destroyed` : `Black's ${name(def)} jumped — your ${name(p)} is destroyed`); return; }
+    const occ = atRest(r, c);
+    if (occ && occ !== p) {
+      if (occ.color === p.color || (p.kind === 'P' && c === m.fc)) { // blocked at arrival: stop one square short
+        if (p.kind === 'N') { r = m.fr; c = m.fc; }
+        else { r -= Math.sign(m.r - m.fr); c -= Math.sign(m.c - m.fc); }
+      } else { kill(occ); if (occ.kind === 'K') over = p.color; }
+    }
+    p.r = r; p.c = c; p.cool = t + COOL_MS;
+    if (p.kind === 'P' && (r === 0 || r === 7)) { p.kind = 'Q'; p.el.querySelector('img').src = `img/pieces/Q${p.color}.webp`; }
+  }
+  const name = p => ({ K: 'king', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight', P: 'pawn' })[p.kind];
+  function kill(p) { pieces = pieces.filter(q => q !== p); p.el.remove(); }
+  let flashT = 0, flashMsg = '';
+  function flash(m) { flashMsg = m; flashT = now() + 2200; }
+  function bot(t) {
+    if (t < botT || over) return;
+    botT = t + 650 + Math.random() * 900;
+    const mine = pieces.filter(p => p.color === 'B' && !busy(p, t));
+    // dodge: jump if a white piece is about to land on us
+    for (const w of pieces.filter(p => p.color === 'W' && p.move)) {
+      const v = mine.find(b => b.r === w.move.r && b.c === w.move.c);
+      if (v && w.move.t1 - t < JUMP_MS && Math.random() < .55) { v.jump = { t0: t, t1: t + JUMP_MS }; return; }
+    }
+    const VAL = { K: 50, Q: 9, R: 5, B: 3, N: 3, P: 1 };
+    let best = null, bs = -1;
+    for (const p of mine) for (const [r, c] of targets(p)) {
+      const tg = atRest(r, c); const s = (tg ? VAL[tg.kind] * 3 : 0) + Math.random() * 2 + (p.kind === 'P' ? .6 : 0) + (p.kind === 'K' ? -2 : 0);
+      if (s > bs) { bs = s; best = [p, r, c]; }
+    }
+    if (best) queue(best[0], best[1], best[2], t);
+  }
+  function tick() {
+    const t = now();
+    if (!over) {
+      pieces.filter(p => p.move && p.move.t1 <= t).sort((a, b) => a.move.t1 - b.move.t1).forEach(p => p.move && resolve(p, t));
+      pieces.forEach(p => { if (p.jump && p.jump.t1 <= t) { p.jump = null; p.cool = t + COOL_MS * .5; } });
+      bot(t);
+    }
+    draw(t); requestAnimationFrame(tick);
+  }
+  function draw(t = now()) {
+    if (!B.firstChild) {
+      for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) { const s = document.createElement('div'); s.className = 'sq'; s.style.cssText = `left:${c * 12.5}%;top:${r * 12.5}%;background:${(r + c) % 2 ? '#3b4270' : '#d9dcf0'}`; s.dataset.r = r; s.dataset.c = c; B.appendChild(s); }
+      B.insertAdjacentHTML('beforeend', '<div id="kfmarks"></div>');
+    }
+    pieces.forEach(p => {
+      if (!p.el.parentNode) B.appendChild(p.el);
+      let r = p.r, c = p.c, lift = 0;
+      if (p.move) { const k = Math.min(1, (t - p.move.t0) / (p.move.t1 - p.move.t0)); r = p.move.fr + (p.move.r - p.move.fr) * k; c = p.move.fc + (p.move.c - p.move.fc) * k; lift = Math.sin(k * Math.PI) * 6; }
+      if (p.jump) { const k = (t - p.jump.t0) / (p.jump.t1 - p.jump.t0); lift = Math.sin(k * Math.PI) * 28; }
+      p.el.style.transform = `translate(${c * 100}%,${r * 100 - lift}%) scale(${p.jump ? 1.12 : 1})`;
+      p.el.style.zIndex = p.move || p.jump ? 5 : 2;
+      p.el.style.filter = p.jump ? 'drop-shadow(0 10px 6px rgba(0,0,0,.35))' : '';
+      const cf = !p.move && !p.jump && p.cool > t ? (p.cool - t) / COOL_MS : 0;
+      p.el.querySelector('.cd').style.height = Math.min(100, cf * 100) + '%';
+    });
+    const marks = document.getElementById('kfmarks');
+    let h = '';
+    if (sel && pieces.includes(sel) && !busy(sel, t)) { h += `<div class="sel" style="left:${sel.c * 12.5}%;top:${sel.r * 12.5}%"></div>`; for (const [r, c] of targets(sel)) h += `<div class="dot" style="left:${c * 12.5}%;top:${r * 12.5}%"></div>`; }
+    if (over) h += `<div class="over"><div>${over === 'W' ? 'You win' : 'Black wins'}<small>Click Restart to play again</small></div></div>`;
+    if (marks.innerHTML !== h) marks.innerHTML = h;
+    const st = document.getElementById('kfstatus');
+    const msg = flashT > t ? flashMsg : `White ${pieces.filter(p => p.color === 'W').length} · Black ${pieces.filter(p => p.color === 'B').length}`;
+    if (st.textContent !== msg) st.textContent = msg;
+  }
+  B.addEventListener('click', e => {
+    if (over) return;
+    const rect = B.getBoundingClientRect(), c = Math.floor((e.clientX - rect.left) / rect.width * 8), r = Math.floor((e.clientY - rect.top) / rect.height * 8), t = now();
+    if (sel && sel.r === r && sel.c === c && !busy(sel, t)) { sel.jump = { t0: t, t1: t + JUMP_MS }; sel = null; return; }
+    if (sel && !busy(sel, t) && legal(sel, r, c)) { queue(sel, r, c, t); sel = null; return; }
+    const p = atRest(r, c); sel = p && p.color === 'W' ? p : null;
+  });
+  document.getElementById('kfreset').onclick = () => { pieces?.forEach(p => p.el.remove()); reset(); };
+  reset(); requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
